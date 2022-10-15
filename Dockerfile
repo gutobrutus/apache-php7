@@ -1,10 +1,7 @@
-FROM alpine:latest
+FROM alpine:3.15
 LABEL maintainer="guto@devops.pro.br"
 
 WORKDIR /app/public
-#Buildar com a linha abaixo descomentada apenas para fins de teste
-#COPY info.php /app/public
-COPY index.html /app/public
 
 #Instalar PHP7.x, essenciais e confurar user, owners dentre outros
 RUN set -x \
@@ -54,6 +51,10 @@ RUN sed -i "s/#LoadModule\ rewrite_module/LoadModule\ rewrite_module/" /etc/apac
  && sed -i "s/ServerTokens\ OS/ServerTokens\ Prod/" /etc/apache2/httpd.conf \
  && sed -i "s/ServerSignature\ On/ServerSignature\ Off/" /etc/apache2/httpd.conf \
  && printf "\n<Directory \"/app/public\">\n\tAllowOverride All\n</Directory>\n" >> /etc/apache2/httpd.conf
+
+#Buildar com a linha abaixo descomentada apenas para fins de teste
+#COPY info.php /app/public
+COPY index.html /app/public
 
  EXPOSE 80
  CMD [ "httpd", "-D", "FOREGROUND" ]
